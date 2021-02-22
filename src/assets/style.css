@@ -1,0 +1,44 @@
+@font-face {
+  font-family: 'pvs2';
+  src:
+    url('fonts/pvs2.ttf?hirhuz') format('truetype'),
+    url('fonts/pvs2.woff?hirhuz') format('woff'),
+    url('fonts/pvs2.svg?hirhuz#pvs2') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Karla:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500&display=swap');
+
+[class^="pvs2-icon--"], [class*=" pvs2-icon--"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'pvs2' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.pvs2-icon--code:before {
+  content: "\e972";
+}
+.pvs2-icon--run:before {
+  content: "\e974";
+}
+.pvs2-icon--list:before {
+  content: "\e92f";
+}
+.pvs2-icon--plus:before {
+  content: "\e95d";
+}
+.pvs2-icon--trash:before {
+  content: "\e969";
+}

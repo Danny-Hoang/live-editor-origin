@@ -28,6 +28,12 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+    <script>
+        // const npm = () => import(`https://cdn.skypack.dev/faker`);
+        const npm = (p) => import(`https://cdn.skypack.dev/${p}`);
+        // const npm = p => import(`//unpkg.com/${p}?module`);
+        window._import = npm;
+    </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.
