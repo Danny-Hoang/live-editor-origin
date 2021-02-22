@@ -15,31 +15,23 @@ import styled from 'styled-components';
 import MonacoEditor from './MonacoEditor';
 import 'overlayscrollbars/css/OverlayScrollbars.css';
 import CodeEditor from '../CodeEditor';
-import OverlayScrollbars from 'overlayscrollbars';
-import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import SnippetList from 'components/SnippetList/SnippetList';
 const SandBox = () => {
 
-    const snippets = useSnippets();
-    const [snippet, setSnippet] = useState(new Snippet({ id: faker.random.uuid() }))
+    const snippets = useSnippets() || [];
+    // const [snippet, setSnippet] = useState(new Snippet({ id: faker.random.uuid() }))
     const [showList, setShowList] = useState(true);
-    const snippetRef = useRef(snippet);
     const activeID = useData('/activeID');
     const dataRef = useRef(snippets);
     const editorRef = useRef();
-    // var m = function npm(p) {
-    //     return import('https://cdn.skypack.dev/faker');
-    // };
-
-    // useEffect(async () => {
-    //     var r = await npm();
-    //     console.log(r)
-    // }, [])
+    const snippet = snippets.find(e => e.id === activeID)  || new Snippet();
+    const snippetRef = useRef(snippet);
+  
 
     useEffect(() => {
         let activeSnippet = snippets.find(s => s.id === activeID);
         if (activeSnippet) {
 
-            setSnippet(activeSnippet);
 
             if (editorRef.current) {
                 editorRef.current.setValue(activeSnippet.content)
@@ -47,18 +39,11 @@ const SandBox = () => {
         }
     }, [activeID, snippets])
 
-    // const [logs, setLogs] = useConsole();
-
     const [showEditor, setShowEditor] = useState(true);
     const [showConsole, setShowConsole] = useState(false);
     const [showEditTitle, setShowEditTile] = useState(false);
 
-    // useEffect(() => {
-    //     var objDiv = document.getElementById("console-wrap");
-    //     if (objDiv) {
-    //         objDiv.firstChild.scrollTop = objDiv.firstChild.scrollHeight;
-    //     }
-    // }, [logs.length, showConsole])
+    
 
 
     const [autorun, setAutorun] = useState(false);
@@ -103,7 +88,7 @@ const SandBox = () => {
                 ...snippetRef.current,
                 content: value
             });
-            setSnippet(newSnippet)
+            // setSnippet(newSnippet)
             snippetRef.current = newSnippet;
 
         });
@@ -113,7 +98,7 @@ const SandBox = () => {
             ...snippet,
             content: newValue
         });
-        setSnippet(newSnippet)
+        // setSnippet(newSnippet)
         snippetRef.current = newSnippet;
     }
     // const onCodeChange = (value) => {
@@ -154,7 +139,7 @@ const SandBox = () => {
             ...snippet,
             title: value
         });
-        setSnippet(newSnippet)
+        // setSnippet(newSnippet)
         snippetRef.current = newSnippet;
 
     }
@@ -171,7 +156,7 @@ const SandBox = () => {
         const newSnippet = new Snippet({
             id: faker.random.uuid()
         });
-        setSnippet(newSnippet)
+        // setSnippet(newSnippet)
         snippetRef.current = newSnippet;
     }
 
@@ -183,7 +168,7 @@ const SandBox = () => {
             ...e
         });
         snippetRef.current = newSnippet;
-        setSnippet(newSnippet);
+        // setSnippet(newSnippet);
         if (e.id) {
             setData('/activeID', e.id)
         }
@@ -203,7 +188,7 @@ const SandBox = () => {
             content: content || '',
             fileName: ''
         })
-        setSnippet(newSnippet);
+        // setSnippet(newSnippet);
         newSnippet.save();
         setData('/activeID', newID);
     }
@@ -241,13 +226,11 @@ const SandBox = () => {
                             <div className="row-flex my-2 mr-3">
                                 <Icon type="plus" size={16} color="royalblue" onClick={() => onClickNew()} className=" ml-auto cursor-pointer" />
                             </div>
-                            <ListSnippet>
-                                {
-                                    snippets.map(e => (
-                                        <div className={classNames("snippet-item", { active: e.id === snippet.id })} onClick={() => onClickSnippet(e)} key={e.id}>{e.title}</div>
-                                    ))
-                                }
-                            </ListSnippet>
+                            <StyledListSnippet 
+                                snippets={snippets}
+                                activeID={activeID}
+                                onItemClick={onClickSnippet}
+                            />
                         </div>
                     )
                 }
@@ -288,15 +271,6 @@ const SandBox = () => {
             </div>
             <StyledIFrame src="http://localhost:8888/" title="tét"></StyledIFrame>
 
-            {/* <LogWrap id="console-wrap" className={classNames({ inactive: !showConsole })}>
-                <div className="console">
-                </div>
-                <div className="row-flex console-buttons">
-                    <AutoIcon onClick={toggleShowConsole} className={classNames("mx-3 cursor-pointer", { active: showConsole })}>console</AutoIcon>
-                    <AutoIcon onClick={clearConsole} className={classNames("mr-3 cursor-pointer", { active: showConsole })}>clear</AutoIcon>
-                    <AutoIcon onClick={toggleCenter} className={classNames("mr-3 cursor-pointer center-button", { active: isCenterMode })}>center</AutoIcon>
-                </div>
-            </LogWrap> */}
         </Wrap>
     );
 }
@@ -358,26 +332,8 @@ const Wrap = styled.div`
     }
 `
 
-const ListSnippet = styled(SimpleBar)`
-    /* background: black; */
-    height: calc(100% - 32px);
-    .snippet-item {
-        line-height: 24px;
-        font-size: 14px;
-        font-weight: 500;
-        padding-left: 24px;
-        color: var(--gray-8);
-        cursor: pointer;
-        font-family: Karla;
-        &:hover {
-            color: #2196F3;
-        }
-        &.active {
-            color: #2196F3;
-            pointer-events: none;
-            cursor: default;
-        }
-    }
+const StyledListSnippet = styled(SnippetList)`
+    height: calc(100vh - 32px);
 `
 
 const SnippetTitle = styled.div`
